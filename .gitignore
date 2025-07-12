@@ -11,7 +11,7 @@ yarn-error.log*
 frontend/dist/
 frontend/.vite/
 
-# Backend build 
+# Backend build  
 backend/dist/
 
 # System files

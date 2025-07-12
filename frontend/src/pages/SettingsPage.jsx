@@ -1,9 +1,11 @@
 import React from 'react'
+import useAuthStore from '../store/useAuthStore.js';
 
-const 5 gw = () => {
+const SettingsPage = () => {
+       const {authUser} =  useAuthStore();
   return (
-    <div>5 gw</div>
+    <div>SettingsPage</div>
   )
 }
 
-export default 5 gw
+export default SettingsPage;
