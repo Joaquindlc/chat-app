@@ -96,8 +96,8 @@ export const updateProfile = async (req, res) => {
     const uploadResponse = await cloudinary.uploader.upload(profilePic);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      {profilePic:uploadResponse.secure_url},
-      {new:true});
+      {profilePic: uploadResponse.secure_url},
+      {new: true});
       /* By default, findOneANdUpdate() returns the document as it was before update was applied. */
 
     res.status(200).json(updatedUser);

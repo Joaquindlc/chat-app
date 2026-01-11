@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { THEMES } from "../constants";
 import  useThemeStore  from "../store/useThemeStore";
 import { Send } from "lucide-react";
@@ -11,6 +11,11 @@ const PREVIEW_MESSAGES = [
 const SettingsPage = () => {
   const { theme, setTheme } = useThemeStore();
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+
   return (
     <div className="h-screen container mx-auto px-4 pt-20 max-w-5xl">
       <div className="space-y-6">
@@ -22,7 +27,7 @@ const SettingsPage = () => {
         <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
           {THEMES.map((t) => (
             <button
-              key={t}
+              key={t.name}
               className={`
                 group flex flex-col items-center gap-1.5 p-2 rounded-lg transition-colors
                 ${theme === t ? "bg-base-200" : "hover:bg-base-200/50"}

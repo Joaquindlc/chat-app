@@ -1,25 +1,26 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios.js";
 import toast from "react-hot-toast";
-//import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
 const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001" : "/";
 
- const useAuthStore = create((set, get) => ({
+
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
   onlineUsers: [],
-  
+  socket: null,
 
   checkAuth: async () => {
     try {
       const res = await axiosInstance.get("/auth/check");
 
       set({ authUser: res.data });
-      //get().connectSocket();
+      get().connectSocket();
     } catch (error) {
       console.log("Error in checkAuth:", error);
       set({ authUser: null });
@@ -34,7 +35,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
       toast.success("Account created successfully");
-      //get().connectSocket();
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -49,7 +50,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 
-      //get().connectSocket();
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -62,7 +63,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
       toast.success("Logged out successfully");
-      //get().disconnectSocket();
+      get().disconnectSocket();
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -82,7 +83,7 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
     }
   },
 
- /*  connectSocket: () => {
+  connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
@@ -95,13 +96,13 @@ const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:5001
 
     set({ socket: socket });
 
-    socket.on("getOnlineUsers", (userIds) => {
+    socket.on("online-users", (userIds) => {
       set({ onlineUsers: userIds });
     });
-  }, */
-  /* disconnectSocket: () => {
+  },
+  disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
-  }, */
+  },
 }));
 
 export default useAuthStore;
